@@ -7,6 +7,8 @@ Listes des composants
 
 • Double commande de moteurs DFRobot permettant de contrôler deux moteurs à courant
 continu à partir des sorties PWM d’un microcontrôleur :
+On corrige la direction en faisant tourner un moteur plus rapidement que l'autre, 
+on le fait tourner en inversant le sens des moteurs
 
 • Photorésistances :
 Detection de la ligne
