@@ -1,0 +1,31 @@
+Listes des composants
+
+
+• Chassis 2 roues motrices alu noir DFRobot :
+
+• Paire d'encodeurs pour DF Robot :
+
+• Double commande de moteurs DFRobot permettant de contrôler deux moteurs à courant
+continu à partir des sorties PWM d’un microcontrôleur :
+
+• Photorésistances :
+Detection de la ligne
+
+• Multiplexeur analogique :
+Choix des controles moteur selon la piste
+
+• Plaque à trou :
+
+• LEDs Blanche : 
+éclairage de la piste
+
+• Carte microcontrôleur Arch Pro Seeedstudio :
+
+• Capteur infrarouge réglable :
+Detection des obstacles
+
+• Régulateur de Tension 5V :
+
+• Piles LR6 1,2V NiMh 2.0 Ah charge rapide possible
+
+• Chargeur 8 piles NiMh et NiCd 320mA
