@@ -1,0 +1,23 @@
+
+OBJECTIF 1 : Faire rouler le robot en autonomie
+
+  -Schéma du branchement
+  -Soudure
+  -branchement
+  -code
+
+
+OBJECTIF 2 : PhotoResistance
+
+  -Schéma des pins
+  -Test des seuils
+  -Phase d'essai (Asservissement)
+  -Robot suit une ligne.
+  
+OBJECTIF 3 : CapteurInfrarouge
+
+  -Schéma des pins
+  -Test des seuils
+  -phases d'essai
+  -Le robot detecte les obstacles
+  
