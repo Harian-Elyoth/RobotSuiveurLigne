@@ -18,16 +18,15 @@ PwmOut E1(P2_5);
 Serial pc(USBTX, USBRX);
 
 //Tensions analogiques aux borne des Photoresistances
-AnalogIn MILIEU(P0_23);
+AnalogIn MILIEU(P0_26);
 AnalogIn INTD(P0_24);
 AnalogIn INTG(P0_25);
-AnalogIn EXTD(P0_26);
+AnalogIn EXTD(P0_23);
 AnalogIn EXTG(P1_30);
-AnalogIn poten(A0);
 Grove_LCD_RGB_Backlight ecran(P0_27, P0_28);
 
 //Vitesses PWM
-const float VitesseMax = 1.0;
+const float VitesseMax = 0.7;
 //const float vitesseDeceleration = 0.35;
 
 int main()
@@ -39,35 +38,44 @@ int main()
         char nb3[10];
         char nb4[10];
         char nb5[10]; */
-    float frein = 0.5;
-    float Kp = 0.3;
-    float Ti = 9;
-    float Td = 10;
+    float frein = 2.3;
+    float Kp = 1.1;
+    float Ti = 0.001;
+    float Td = 0.7;
     float dt = 2;
-    float I = 0.0;
     M1 = HIGH;
     M2 = HIGH;
     float Vitesse;
+    float somme_ERR = 0;
     while(1) {
-        wait_ms(2);
-
+        wait_ms(dt);
         float ERR1 = (INTD - INTG);
         //Sens de rotation des moteurs
-        float P = Kp * ERR1;//0.06
-        I = I + (Ti*ERR1*dt/1000);//0.0036
-        float D = Td * (ERR1 - ERR0)/dt;//0.3
-        Vitesse = VitesseMax - frein * ERR1;
+        somme_ERR += ERR1;
+        float P = Kp * ERR1;
+        float I = Ti * somme_ERR*dt/1000;
+        float D = Td * (ERR1 - ERR0)/dt;
+        Vitesse = VitesseMax - frein * abs(ERR1);
         float delta = P + I + D;
         ERR0 = ERR1;
-        if((MILIEU - INTD) < 0) {
+        if((INTD - INTG) < -0.15) {
             E1.write(Vitesse + delta);
-            E2.write(Vitesse);
-        } else if((MILIEU - INTG) < 0) {
-            E2.write(Vitesse + delta);
-            E1.write(Vitesse);
+            E2.write(Vitesse - delta);
+            ecran.setRGB(255, 0, 0);
+        } else if((INTD-INTG) > 0.15) {
+            E2.write(Vitesse - delta);
+            E1.write(Vitesse + delta);
+            ecran.setRGB(0, 0, 255);
         } else {
             E1.write(Vitesse);
             E2.write(Vitesse);
+            ecran.setRGB(0, 255, 0);
+        }
+        if(I > 0.05){
+            I = 0.05;
+        }
+        if(I < -0.05){
+            I = -0.05;
         }
     }
     /*float ERR1G = MILIEU - INTG;
