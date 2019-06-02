@@ -26,7 +26,7 @@ AnalogIn EXTG(P1_30);
 Grove_LCD_RGB_Backlight ecran(P0_27, P0_28);
 
 //Vitesses PWM
-const float VitesseMax = 0.7;
+const float VitesseMax = 1.0;
 //const float vitesseDeceleration = 0.35;
 
 int main()
@@ -38,10 +38,10 @@ int main()
         char nb3[10];
         char nb4[10];
         char nb5[10]; */
-    float frein = 2.3;
-    float Kp = 1.1;
-    float Ti = 0.001;
-    float Td = 0.7;
+    float frein = 2.0;
+    float Kp = 0.4;
+    float Ti = 0.01;
+    float Td = 0.8;
     float dt = 2;
     M1 = HIGH;
     M2 = HIGH;
@@ -52,17 +52,18 @@ int main()
         float ERR1 = (INTD - INTG);
         //Sens de rotation des moteurs
         somme_ERR += ERR1;
-        float P = Kp * ERR1;
-        float I = Ti * somme_ERR*dt/1000;
+        float P = ERR1;
+        float I = Ti * somme_ERR*dt;
         float D = Td * (ERR1 - ERR0)/dt;
         Vitesse = VitesseMax - frein * abs(ERR1);
-        float delta = P + I + D;
+        float delta = Kp*(P + I + D);
+        delta = abs(delta);
         ERR0 = ERR1;
-        if((INTD - INTG) < -0.15) {
-            E1.write(Vitesse + delta);
-            E2.write(Vitesse - delta);
+        if(ERR1 < -0.2) {
+            E1.write(Vitesse - delta);
+            E2.write(Vitesse + delta);
             ecran.setRGB(255, 0, 0);
-        } else if((INTD-INTG) > 0.15) {
+        } else if(ERR1 > 0.1) {
             E2.write(Vitesse - delta);
             E1.write(Vitesse + delta);
             ecran.setRGB(0, 0, 255);
@@ -71,11 +72,11 @@ int main()
             E2.write(Vitesse);
             ecran.setRGB(0, 255, 0);
         }
-        if(I > 0.05){
-            I = 0.05;
+        if(I > 0.1){
+            I = 0.1;
         }
-        if(I < -0.05){
-            I = -0.05;
+        if(I < -0.1){
+            I = -0.1;
         }
     }
     /*float ERR1G = MILIEU - INTG;
